@@ -14,11 +14,11 @@ namespace WeatherForecast.Data.Entities
     public class WeatherDescription
     {
         public string Main { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     public class Main
     {
-        public string Temp { get; set; }
+        public double Temp { get; set; }
     }
 }

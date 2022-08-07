@@ -18,7 +18,7 @@
 
                 <div class="row mb-2">
                     <div class="col-md-6 col-sm-12">
-                        <input type="button" value="Get Weather Info" id="getWeather"/>
+                        <input type="button" value="Get Weather Info" onclick="GetWeatherForecast()"/>
                     </div>
                 </div>
                
@@ -43,29 +43,33 @@
 </div>
 @section Scripts{
     <script>
+        function GetWeatherForecast() {
+                $.ajax({
+                    url: "Weather/GetWeatherForecast",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#weatherDT').DataTable().rows().remove().draw();
+                        $('#weatherDT').DataTable().rows().add(data);
+                    }
+                });
+        };
         $(document).ready(function () {
-            $("getWeather").click();
-            
-            $.ajax({
-            url: "Weather/GetWeatherForecast",
-            dataType: 'json',
-            success: function(data) {
-                var table = $('#weatherDT').DataTable({
-                    data: [
-                        { "name": data.data["name"],  
-                        "description": data.data["description"], 
-                        "temperature": data.data["temperature"]
+            var table = $('#weatherDT').DataTable({
+                        "ajax": {
+                            "url": "/Weather/GetWeatherForecast",
+                            "type": "GET",
+                            "datatype": "json",
+                            "error": function (res) {
+                                console.log(res);
+                            },
                         },
-                    ],
-                    columns: [
-                        { "data": "name" },
-                        { "data": "description" },
-                        { "data": "temperature" },
-                    ],
-                    columnDefs: [ { "defaultContent": "-", "targets": "_all" } ]
-                })
-            }
-            })
+                        columns: [
+                            { "data": "name" },
+                            { "data": "description" },
+                            { "data": "temperature" },
+                        ],
+                        columnDefs: [ { "defaultContent": "-", "targets": "_all" } ]
+                    })
         })
     </script>
 
