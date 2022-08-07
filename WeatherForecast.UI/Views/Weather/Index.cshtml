@@ -1,0 +1,73 @@
+﻿@model WeatherForecast.UI.Model.WeatherForecastViewModel
+
+@{
+    ViewBag.Title = "Weather Forecast";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel">
+            <div class="panel-title">
+                <div class="d-flex justify-content-between">
+                    <font style="vertical-align: inherit;"><h2 class="text-info">Weather Forecast of Ankara</h2></font>
+                </div>
+              
+            </div>
+            <div class="panel-body">
+
+                <div class="row mb-2">
+                    <div class="col-md-6 col-sm-12">
+                        <input type="button" value="Get Weather Info" id="getWeather"/>
+                    </div>
+                </div>
+               
+
+                <table id="weatherDT" class="table  table-bordered table-hover table-striped table-responsive-xl  w-100">
+                    <thead>
+                        <tr>
+                            <th> Name</th>
+                            <th> Temperature</th>
+                            <th> Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("getWeather").click();
+            
+            $.ajax({
+            url: "Weather/GetWeatherForecast",
+            dataType: 'json',
+            success: function(data) {
+                var table = $('#weatherDT').DataTable({
+                    data: [
+                        { "name": data.data["name"],  
+                        "description": data.data["description"], 
+                        "temperature": data.data["temperature"]
+                        },
+                    ],
+                    columns: [
+                        { "data": "name" },
+                        { "data": "description" },
+                        { "data": "temperature" },
+                    ],
+                    columnDefs: [ { "defaultContent": "-", "targets": "_all" } ]
+                })
+            }
+            })
+        })
+    </script>
+
+
+}

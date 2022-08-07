@@ -25,7 +25,7 @@ namespace WeatherForecast.Service.Weather
             {
                 if (fullPath == "")
                 {
-                    fullPath = Path.Combine(_iConfig.GetSection("MySettings").GetSection("BaseURL").Value, path);
+                    fullPath = Path.Combine(path);
 
                     fullPath += "?";
                     foreach (var item in queries)
@@ -33,7 +33,7 @@ namespace WeatherForecast.Service.Weather
                         fullPath += item.Key + "=" + item.Value + "&";
                     }
 
-                    fullPath += "appid" + "=" + _iConfig.GetSection("MySettings").GetSection("API_KEY").Value;
+                    fullPath += "appid" + "=" + "0a7f4479ca5b9f99ab40b530d42bc11a";
 
                 }
 
@@ -53,23 +53,23 @@ namespace WeatherForecast.Service.Weather
             }
             catch (Exception ex)
             {
-                return new Result<string> { Data = null, Success = false, Message = ex.message, Exception = ex };
+                return new Result<string> { Data = null, Success = false, Message = ex.Message, Exception = ex };
             }
         }
 
-        public WeatherForecast GetWeatherForecast(double latitude, double longitude)
+        public OpenWeatherResponse GetWeatherForecast(double latitude, double longitude)
         {
             var data = new Dictionary<string, double>();
             data.Add("lat", latitude);
             data.Add("lon", longitude);
 
-            var responseText = MakeRequestAsync("/data/2.5/weather", data).GetAwaiter().GetResult();
+            var responseText = MakeRequestAsync("https://api.openweathermap.org/data/2.5/weather", data).GetAwaiter().GetResult();
             if (responseText.Success == false)
             {
                 throw new Exception("API Weather Error", responseText.Exception);
             }
-            Console.WriteLine(responseText.Data.ToString());
-            var forecast = JsonConvert.DeserializeObject<WeatherForecast>(responseText.Data);
+
+            var forecast = JsonConvert.DeserializeObject<OpenWeatherResponse>(responseText.Data);
             return forecast;
         }
     }

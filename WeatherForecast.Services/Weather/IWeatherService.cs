@@ -9,6 +9,6 @@ namespace WeatherForecast.Service.Weather
     using WeatherForecast.Data.Entities;
     public interface IWeatherService
     {
-        WeatherForecast GetWeatherForecast(double latitude, double longitude);
+        OpenWeatherResponse GetWeatherForecast(double latitude, double longitude);
     }
 }

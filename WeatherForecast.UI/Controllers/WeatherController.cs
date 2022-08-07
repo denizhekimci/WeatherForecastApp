@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WeatherForecast.UI.Model;
 
 namespace WeatherForecast.UI.Controllers
 {
@@ -20,8 +21,17 @@ namespace WeatherForecast.UI.Controllers
         public JsonResult GetWeatherForecast()
         {
             var weather = _weatherService.GetWeatherForecast(39.9334, 32.8597);
-            Console.WriteLine(weather.ToString());
-            return Json(weather);
+            var model = new WeatherForecastViewModel
+            {
+                Name = weather.Name,
+                Description = weather.Weather.FirstOrDefault().Description,
+                Temperature = weather.Main.Temp
+            };
+
+            return Json(new
+            {
+                data = model
+            });
         }
     }
 }
