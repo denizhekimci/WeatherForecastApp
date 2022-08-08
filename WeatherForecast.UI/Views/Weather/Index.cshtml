@@ -47,22 +47,16 @@
                 $.ajax({
                     url: "Weather/GetWeatherForecast",
                     dataType: 'json',
-                    success: function(data) {
-                        $('#weatherDT').DataTable().rows().remove().draw();
-                        $('#weatherDT').DataTable().rows().add(data);
+                    success: function(result) {
+                        var table = $('#weatherDT').DataTable();
+                        table.clear();
+                        table.rows.add(result.data);
+                        table.draw(true);
                     }
                 });
         };
         $(document).ready(function () {
             var table = $('#weatherDT').DataTable({
-                        "ajax": {
-                            "url": "/Weather/GetWeatherForecast",
-                            "type": "GET",
-                            "datatype": "json",
-                            "error": function (res) {
-                                console.log(res);
-                            },
-                        },
                         columns: [
                             { "data": "name" },
                             { "data": "description" },
