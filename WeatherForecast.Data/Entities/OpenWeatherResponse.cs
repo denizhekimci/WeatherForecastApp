@@ -9,6 +9,8 @@ namespace WeatherForecast.Data.Entities
         public List<WeatherDescription> Weather { get; set; }
 
         public Main Main { get; set; }
+
+        public long Dt { get; set; }
     }
 
     public class WeatherDescription

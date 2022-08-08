@@ -29,6 +29,7 @@
                             <th> Name</th>
                             <th> Temperature</th>
                             <th> Description</th>
+                            <th> Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,11 +39,40 @@
 
 
             </div>
+            <div class="row mb-2">
+                <canvas id="chart" width="400" height="400"></canvas>
+            </div>
         </div>
     </div>
 </div>
 @section Scripts{
     <script>
+        var chartName = "chart";  
+            var ctx = document.getElementById(chartName).getContext('2d');
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                  labels: [],
+                  datasets: [{
+                    data: [],
+                    backgroundColor: '#404040',
+                    fill: false,
+                    animations: false
+                  }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+        });
         function GetWeatherForecast() {
                 $.ajax({
                     url: "Weather/GetWeatherForecast",
@@ -52,6 +82,11 @@
                         table.clear();
                         table.rows.add(result.data);
                         table.draw(true);
+                        
+                        var indx = result.data.length - 1;
+                        myLineChart.data.labels.push(result.data[indx].date);
+                        myLineChart.data.datasets[0].data.push(result.data[indx].temperature);
+                        myLineChart.update();
                     }
                 });
         };
@@ -59,12 +94,15 @@
             var table = $('#weatherDT').DataTable({
                         columns: [
                             { "data": "name" },
-                            { "data": "description" },
                             { "data": "temperature" },
+                            { "data": "description" },
+                            { "data": "date" }
                         ],
                         columnDefs: [ { "defaultContent": "-", "targets": "_all" } ]
                     })
-        })
+            
+        });
+
     </script>
 
 
